@@ -41,27 +41,29 @@ class Engine
     const TEXT_DAVINCI_002 = 'text-davinci-002';
 
     public function run(
-        Extractor $extractor,
+        Extractor          $extractor,
         TextContent|string $input,
-        string $model,
-        int $maxTokens,
-        float $temperature,
-    ): mixed {
+        string             $model,
+        int                $maxTokens,
+        float              $temperature,
+        string             $mode = 'json',
+    ): mixed
+    {
         $preprocessed = $extractor->preprocess($input);
 
         $prompt = $extractor->prompt($preprocessed);
 
         $response = match (true) {
+
             // Legacy text completion models
-            $this->isCompletionModel($model) => OpenAI::completions()->create([
+            $mode === 'completion' && $this->isCompletionModel($model) => OpenAI::completions()->create([
                 'model' => $model,
                 'max_tokens' => $maxTokens,
                 'temperature' => $temperature,
                 'prompt' => $prompt,
             ]),
 
-            // New json mode models.
-            $this->isVisionModel($model) => OpenAI::chat()->create([
+            $mode === 'vision' && $this->isVisionModel($model) => OpenAI::chat()->create([
                 'model' => $model,
                 'max_tokens' => $maxTokens,
                 'temperature' => $temperature,
@@ -88,7 +90,7 @@ class Engine
                 ],
             ]),
 
-            $this->isJsonModeCompatibleModel($model) => OpenAI::chat()->create([
+            $mode === 'json' && $this->isJsonModeCompatibleModel($model) => OpenAI::chat()->create([
                 'model' => $model,
                 'max_tokens' => $maxTokens,
                 'temperature' => $temperature,
