@@ -30,6 +30,7 @@ class ExtractorManager
         string $model = 'gpt-4o-mini',
         int $maxTokens = 2000,
         float $temperature = 0.1,
+        string $mode = 'json',
     ): mixed {
         $extractor = $this->resolveExtractor($nameOrClass);
 
@@ -43,6 +44,7 @@ class ExtractorManager
             model: $model ?? $extractor->model(),
             maxTokens: $maxTokens ?? $extractor->maxTokens(),
             temperature: $temperature ?? $extractor->temperature(),
+            mode: $mode,
         );
     }
 
@@ -50,9 +52,10 @@ class ExtractorManager
         string $view,
         TextContent|string $input,
         ?array $config = null,
-        string $model = 'gpt-3.5-turbo-1106',
+        string $model = 'gpt-4o-mini',
         int $maxTokens = 2000,
         float $temperature = 0.1,
+        string $mode = 'json',
     ): mixed {
         $extractor = new Simple(array_merge($config, [
             'view' => $view,
@@ -64,6 +67,7 @@ class ExtractorManager
             model: $model ?? $extractor->model(),
             maxTokens: $maxTokens ?? $extractor->maxTokens(),
             temperature: $temperature ?? $extractor->temperature(),
+            mode: $mode,
         );
     }
 
@@ -71,9 +75,10 @@ class ExtractorManager
         ImageContent|TextContent|string $input,
         array $fields,
         ?array $config = null,
-        string $model = 'gpt-3.5-turbo-1106',
+        string $model = 'gpt-4o-mini',
         int $maxTokens = 2000,
         float $temperature = 0.1,
+        string $mode = 'json',
     ): mixed {
         $extractor = $this->resolveExtractor(Fields::class);
 
@@ -89,6 +94,7 @@ class ExtractorManager
             model: $model ?? $extractor->model(),
             maxTokens: $maxTokens ?? $extractor->maxTokens(),
             temperature: $temperature ?? $extractor->temperature(),
+            mode: $mode,
         );
     }
 
